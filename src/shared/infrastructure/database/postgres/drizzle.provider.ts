@@ -2,10 +2,12 @@ import { ConfigService } from "@nestjs/config";
 import { sql } from "drizzle-orm";
 import { drizzle, PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
+import * as schema from "./schema";
+
 
 export const DRIZZLE = Symbol('DRIZZLE');
 
-export type DrizzleDB = PostgresJsDatabase<{}>;
+export type DrizzleDB = PostgresJsDatabase<typeof schema>;
 
 export const DrizzleProvider = {
     provide: DRIZZLE,
@@ -13,7 +15,7 @@ export const DrizzleProvider = {
     useFactory:async (configservice:ConfigService): Promise<DrizzleDB> => {
         const connectionString = configservice.getOrThrow<string>('POSTGRES_DATABASE_URL');
         const clinet = postgres(connectionString);
-        const db =  drizzle(clinet,{});
+        const db =  drizzle(clinet,{schema});
         await db.execute(sql`SELECT 1`);
         return db;
     } 
