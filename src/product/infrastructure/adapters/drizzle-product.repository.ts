@@ -62,6 +62,25 @@ export class DrizzleProductRepository implements ProductRepository
         return productRows.map(DrizzleProductRepository.toDomain);
     }
 
+
+
+    async findBySku(sku: Sku): Promise<Product | null> {
+        const row = await this.db.select().from(products).where(eq(products.sku, sku.getValue()));
+        if(row.length === 0) return null;
+        return DrizzleProductRepository.toDomain(row[0]);
+    }
+
+    async findByName(name: string): Promise<Product | null> {
+        const row = await this.db.select().from(products).where(eq(products.name, name));
+        if(row.length === 0) return null;
+        return DrizzleProductRepository.toDomain(row[0]);
+    }
+
+
+    async delete(id: ProductId): Promise<void> {
+         await this.db.delete(products).where(eq(products.id, id.getValue()));
+    }
+
     private static toDomain(row: typeof products.$inferSelect): Product
     {
         return Product.reconsitute({

@@ -3,15 +3,19 @@ import { GetProductQuery } from "../get-product.query";
 import { Inject } from "@nestjs/common";
 import { PRODUCT_REPOSITORY, ProductRepository } from "../../ports/product.repository.port";
 import { ProductId } from "../../../domain/value-objects/product-id.vo";
+import { ApplicationException, ApplicationExceptionCode } from "../../../../shared/domain/exceptions/application.exception";
+import { Product } from "../../../domain/entities/product.entity";
 
 
 @QueryHandler(GetProductQuery) 
-export class GetProductHandler implements IQueryHandler<GetProductQuery>
+export class GetProductHandler implements IQueryHandler<GetProductQuery,Product>
 {
     constructor(@Inject(PRODUCT_REPOSITORY) private readonly productRepository: ProductRepository) {}
 
-    async execute(query: GetProductQuery): Promise<any> {
-        return this.productRepository.findById(new ProductId(query.id));
+    async execute(query: GetProductQuery): Promise<Product> {
+        const product = await this.productRepository.findById(new ProductId(query.id));
+        if(!product) throw new ApplicationException('Product not found with id: ' + query.id,ApplicationExceptionCode.NOT_FOUND);
+        return product;
     }
     
 

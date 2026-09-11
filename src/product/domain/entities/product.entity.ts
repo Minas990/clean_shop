@@ -1,4 +1,5 @@
 import { AggregateRoot } from "../../../shared/domain/aggregate-root";
+import { DomainException } from "../../../shared/domain/exceptions/domain.exception";
 import { Money } from "../../../shared/domain/value-objects/money.vo";
 import { ProductId } from "../value-objects/product-id.vo";
 import { Sku } from "../value-objects/sku.vo";
@@ -133,7 +134,7 @@ export class Product extends AggregateRoot
     {
         if(name.length < 3 || name.length > 100)
         {
-            throw new Error("Name must be between 3 and 100 characters");
+            throw new DomainException("Name must be between 3 and 100 characters");
         }
     }
 
@@ -141,7 +142,7 @@ export class Product extends AggregateRoot
     {
         if(stock < 0)
         {
-            throw new Error("Stock must be greater than or equal to 0");
+            throw new DomainException("Stock must be greater than or equal to 0");
         }
     }
 }
