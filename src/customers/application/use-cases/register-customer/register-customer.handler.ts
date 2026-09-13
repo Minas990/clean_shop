@@ -1,4 +1,4 @@
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler, EventPublisher, ICommandHandler } from "@nestjs/cqrs";
 import { RegisterCustomerCommand } from "./register-customer.command";
 import { Inject } from "@nestjs/common";
 import { CUSTOMER_REPOSITORY, CustomerRepositoryPort } from "../../ports/customer.repository";
@@ -10,7 +10,9 @@ import { ApplicationException, ApplicationExceptionCode } from "../../../../shar
 @CommandHandler(RegisterCustomerCommand)
 export class RegisteCustomerHandler implements ICommandHandler<RegisterCustomerCommand,void>
 {
-    constructor(@Inject(CUSTOMER_REPOSITORY) private readonly csRepo : CustomerRepositoryPort) {
+    constructor(@Inject(CUSTOMER_REPOSITORY) private readonly csRepo : CustomerRepositoryPort
+                ,private readonly eventPublisher: EventPublisher
+) {
 
     }
 
@@ -19,8 +21,9 @@ export class RegisteCustomerHandler implements ICommandHandler<RegisterCustomerC
         const exisitngCustomer =await this.csRepo.findByEmail(email);
         if(exisitngCustomer) 
             throw new ApplicationException('user already exists',ApplicationExceptionCode.CONFLICT );
-        const customer = Customer.register(email,command.firstName,command.lastName,command.phone);
+        const customer = this.eventPublisher.mergeObjectContext( Customer.register(email,command.firstName,command.lastName,command.phone));
         await this.csRepo.save(customer);
+        customer.commit();
     }
 
     
