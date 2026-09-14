@@ -89,7 +89,7 @@ export class OrderItem extends Entity
     get productName(){return this._productName}
     get unitPrice(){ return  this._unitPrice}
     get quantity(){return this.quantity}
-    get discount() {return this.discount}
+    get discount(): Money | null {return this.discount}
 
 
 }

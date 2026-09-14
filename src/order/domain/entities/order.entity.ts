@@ -87,4 +87,13 @@ export class Order extends AggregateRoot
         Money.zero(this._items[0].unitPrice.getCurrency()));
     }
 
+    get id() {return this._id}
+    get customerId() :string {return this._customerId}
+    get status() : OrderStatus {return this._status}
+    get items() : OrderItem[] { return this._items}
+    get shippingAddress():ShippingAddress {return this._shippingAddress}
+    get trackingNumber(): string |null { return this._trackingNumber}
+    get notes(): string|null {return this._notes}
+    get createdAt():Date {return this._createdAt}
+    get updatedAt(): Date { return this._updatedAt}
 }

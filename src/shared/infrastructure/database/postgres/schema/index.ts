@@ -6,4 +6,4 @@ export {
 export {
     customers
 } from './customer.schema';
-export {orders,orderItems,orderStatusEnum, shippingAddress} from './orders.schema';
+export {orders,orderItems,orderStatusEnum,orderItemsRelations,orderRelations} from './orders.schema';

@@ -9,5 +9,5 @@ export interface OrderRepositoryPort
     findById(id: OrderId) : Promise<Order|null>
     findByCustomerId(customerId: string) : Promise<Order[]>
     findAll(): Promise<Order[]>
-    delete(id:string): Promise<void>
+    delete(id:OrderId): Promise<void>
 }

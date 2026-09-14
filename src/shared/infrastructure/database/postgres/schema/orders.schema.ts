@@ -7,6 +7,7 @@ import { varchar } from "drizzle-orm/pg-core";
 import { text } from "drizzle-orm/pg-core";
 import { timestamp } from "drizzle-orm/pg-core";
 import { products } from "./product.schema";
+import { relations } from "drizzle-orm";
 
 export const orderStatusEnum = pgEnum('order_status',[
     'pending',
@@ -22,21 +23,17 @@ export const orders = pgTable('orders',{
     status: orderStatusEnum().default('pending').notNull(),
     totalAmount: integer().notNull(),
     totalCurrency: varchar({length:3}).notNull().default('USD'),
-    shippingId: uuid().notNull().references(() => shippingAddress.id),
-    createdAt: timestamp().defaultNow(),
-    updatedAt: timestamp().defaultNow()
-});
-
-export const shippingAddress = pgTable('shipping_address',{
-    id:uuid().primaryKey(),
-    street: varchar(),
-    city:varchar(),
-    state:varchar(),
-    zipCode: varchar(),
-    country: varchar(),
-    trackingNumber: varchar(),
+    createdAt: timestamp().defaultNow().notNull(),
+    updatedAt: timestamp().defaultNow().notNull(),
+    adressStreet: varchar(),
+    adressCity:varchar(),
+    adressState:varchar(),
+    adressZipCode: varchar(),
+    adressCountry: varchar(),
+    adressTrackingNumber: varchar(),
     notes:text(),
-})
+
+});
 
 export const orderItems =pgTable('order_items', {
     id: uuid().primaryKey(),
@@ -48,6 +45,14 @@ export const orderItems =pgTable('order_items', {
     quantity: integer().notNull(),
     discountAmount: integer(),
     discountCurrency: varchar({length:3}),
-    createdAt: timestamp().defaultNow(),
-    updatedAt: timestamp().defaultNow()
+    createdAt: timestamp().defaultNow().notNull(),
+    updatedAt: timestamp().defaultNow().notNull()
 });
+
+export const orderRelations = relations(orders,({ many }) => ({
+    items: many(orderItems),
+}));
+
+export const orderItemsRelations= relations(orderItems,({one}) => ({
+    order: one(orders, { fields: [orderItems.orderId], references: [orders.id] }),
+}));
