@@ -14,6 +14,11 @@ export class Money
         return new Money(normalizedAmount, currency);
     }
 
+    static zero(currency:string = 'USD' ) : Money
+    {
+        return new Money(0,currency);
+    }
+
     multiply(factor: number): Money
     {
         if(factor < 0 ) 
@@ -29,6 +34,15 @@ export class Money
              throw new DomainException('res must be >0 while subtracting')
         return new Money(res,this.currency);
     }
+
+    add(other:Money):Money
+    {
+        this.assertSameCurrency(other);
+        const res = this.amount + other.amount;
+        return new Money(res,this.currency);
+    }
+
+
     isGreateThan(money:Money): boolean
     {
         this.assertSameCurrency(money);
