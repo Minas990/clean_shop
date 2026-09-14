@@ -5,6 +5,7 @@ import { DrizzleModule } from './shared/infrastructure/database/postgres/drizzle
 import { CqrsModule } from '@nestjs/cqrs';
 import { ProductModule } from './product/product.module';
 import { CustomerModule } from './customers/customer.module';
+import { OrderMoudle } from './order/order.module';
 
 @Module({
   imports: [
@@ -15,7 +16,8 @@ import { CustomerModule } from './customers/customer.module';
     MongoModule,
     DrizzleModule,
     ProductModule,
-    CustomerModule
+    CustomerModule,
+    OrderMoudle
   ],
 })
 export class AppModule {}
