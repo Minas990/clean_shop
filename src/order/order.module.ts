@@ -9,12 +9,14 @@ import { PRODUCT } from "./application/ports/product.port";
 import { ProductAdapter } from "./infrastructure/adapters/product.adapter";
 import { CustomerModule } from "../customers/customer.module";
 import { ProductModule } from "../product/product.module";
+import { QueryHandlers } from "./application/query/handlers";
 
 @Module({
     imports:[CustomerModule,ProductModule],
     controllers:[OrderController],
     providers: [
         ...CommandHandlers,
+        ...QueryHandlers,
         {
             provide: ORDER_REPOSITORY,
             useClass: DrizzleOrderRepo

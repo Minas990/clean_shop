@@ -1,4 +1,4 @@
-import { Command, CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { Command, CommandHandler, EventPublisher, ICommandHandler } from "@nestjs/cqrs";
 import { PlaceOrderCommand } from "./place-order.comand";
 import { Inject } from "@nestjs/common";
 import { ORDER_REPOSITORY, OrderRepositoryPort } from "../../ports/orderRepository.port";
@@ -18,7 +18,8 @@ export class PlaceOrderHandler implements ICommandHandler<PlaceOrderCommand>
     constructor(@Inject(ORDER_REPOSITORY) 
     private readonly orderRepository: OrderRepositoryPort,
     @Inject(CUSTOMER) private readonly customer : CustomerPort,
-    @Inject(PRODUCT) private readonly product: ProductPort
+    @Inject(PRODUCT) private readonly product: ProductPort,
+    private readonly eventPublisher: EventPublisher
 ) {}
 
     async execute(command: PlaceOrderCommand): Promise<any> {
@@ -39,7 +40,9 @@ export class PlaceOrderHandler implements ICommandHandler<PlaceOrderCommand>
             country: command.shippingCountry,
             state: command.shippingState
         });
-        const order = Order.place(command.customerId,items,shippingAddress)
+        
+        const order =this.eventPublisher.mergeObjectContext( Order.place(command.customerId,items,shippingAddress));
         await this.orderRepository.save(order);
+        order.commit();
     }
 }  

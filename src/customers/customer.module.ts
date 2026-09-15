@@ -23,10 +23,10 @@ import { NodemailerNotificationsAdapter } from "./infrastructure/adapters/nodema
         },
         {
             provide: NOTIFICATION_SERVICE,
-            useClass: NodemailerNotificationsAdapter
+            useClass: ConsoleNotificationAdapter
         }
     ],
-    exports:[CUSTOMER_REPOSITORY]
+    exports:[CUSTOMER_REPOSITORY,NOTIFICATION_SERVICE]
 })
 
 export class CustomerModule {

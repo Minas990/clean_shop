@@ -1,6 +1,7 @@
 import { AggregateRoot } from "../../../shared/domain/aggregate-root";
 import { DomainException } from "../../../shared/domain/exceptions/domain.exception";
 import { Money } from "../../../shared/domain/value-objects/money.vo";
+import { OrderPlacedEvent } from "../events/order-placed.event";
 import { OrderId } from "../value-objects/order-id.vo";
 import { OrderStatus } from "../value-objects/order-status.vo";
 import { ShippingAddress } from "../value-objects/shipping-address.vo";
@@ -64,6 +65,7 @@ export class Order extends AggregateRoot
             trackingNumber:null
         });
 
+        order.apply(new OrderPlacedEvent(order.id.getValue(),order.customerId));
         return order;
     }
 
