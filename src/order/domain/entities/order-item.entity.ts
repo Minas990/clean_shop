@@ -41,7 +41,7 @@ export class OrderItem extends Entity
     )
     {
         if(quantity <=0 )
-            return new DomainException('quantity must be >0')
+            throw new DomainException('quantity must be >0')
         
         return new OrderItem({
             id: new UniqueId(),
@@ -61,7 +61,7 @@ export class OrderItem extends Entity
     updateQuantity(quantity:number)
     {
         if(quantity<=0)
-            return new DomainException('quantity must be >0')
+            throw new DomainException('quantity must be >0')
         this._quantity=quantity;
     }
     
@@ -88,8 +88,8 @@ export class OrderItem extends Entity
     get productId(){return this._productId}
     get productName(){return this._productName}
     get unitPrice(){ return  this._unitPrice}
-    get quantity(){return this.quantity}
-    get discount(): Money | null {return this.discount}
+    get quantity(){return this._quantity}
+    get discount(): Money | null {return this._discount}
 
 
 }

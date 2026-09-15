@@ -24,7 +24,8 @@ import { MongoProductRepository } from "./infrastructure/adapters/mongo-product.
             },
             inject:[ConfigService,MongoProductRepository,DrizzleProductRepository]
         }
-    ]
+    ],
+    exports:[PRODUCT_REPOSITORY]
 })
 export class ProductModule
 {

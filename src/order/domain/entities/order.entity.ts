@@ -78,6 +78,11 @@ export class Order extends AggregateRoot
         return this.getSubtotal();
     }
 
+    getItemsCount()//the entire quantity not the length
+    {
+        return this._items.reduce((count, item) => count + item.quantity, 0);
+    }
+
     getSubtotal(): Money
     {
         if(this._items.length === 0 )

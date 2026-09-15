@@ -25,7 +25,8 @@ import { NodemailerNotificationsAdapter } from "./infrastructure/adapters/nodema
             provide: NOTIFICATION_SERVICE,
             useClass: NodemailerNotificationsAdapter
         }
-    ]
+    ],
+    exports:[CUSTOMER_REPOSITORY]
 })
 
 export class CustomerModule {
