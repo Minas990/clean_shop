@@ -29,6 +29,7 @@ export class OrderController
                 unitPrice: item.unitPrice,
                 currency: item.currency ?? "USD",
                 quantity: item.quantity,
+                discount: item.discount
             };
         }),dto.shippingStreet,dto.shippingCity,dto.shippingState,dto.shippingZipcode,dto.shippingCountry));
     }

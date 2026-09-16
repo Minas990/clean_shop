@@ -32,7 +32,8 @@ export class PlaceOrderHandler implements ICommandHandler<PlaceOrderCommand>
                 throw new ApplicationException('product not found '+item.productId);
         })
         
-        const items = command.items.map((item) => OrderItem.create(item.productId,item.productName,Money.create(item.unitPrice,item.currency),item.quantity));
+        const items = command.items.map((item) => OrderItem.create(item.productId,item.productName,Money.create(item.unitPrice,item.currency),item.quantity,
+    item.discount!==undefined ? Money.create(item.discount,item.currency):undefined));
         const shippingAddress = ShippingAddress.create({
             city: command.shippingCity,
             street: command.shippingStreet,

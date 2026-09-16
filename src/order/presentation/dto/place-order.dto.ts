@@ -24,6 +24,10 @@ export class PlaceOrderItemDto
     @Min(1)
     quantity!:number;
 
+    @IsNumber()
+    @IsOptional()
+    @Min(0)
+    discount?:number;
 }
 
 export class PlaceOrderDto
