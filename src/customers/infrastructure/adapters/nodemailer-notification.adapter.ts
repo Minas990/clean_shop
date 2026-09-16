@@ -30,11 +30,11 @@ export class NodemailerNotificationsAdapter implements NotificationPort
         const customer = await this.customersRepo.findById(new CustomerId(notification.recipientId));
         if(!customer) throw new ApplicationException(`user not found by ${notification.recipientId}`);
         await this.transport.sendMail({
-            to:customer?.getEmail().toString(),
+            to:customer.getEmail().toString(),
             from:this.from,
             subject:notification.subject,
             text: notification.message
         });
-        this.logger.log(`email send to user ${customer?.getEmail().getValue()}`);
+        this.logger.log(`email send to user ${customer.getEmail().getValue()}`);
     }
 }

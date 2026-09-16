@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Query } from "@nestjs/common";
+import { Body, Controller, Get, Param, ParseUUIDPipe, Patch, Post, Query } from "@nestjs/common";
 import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { PlaceOrderDto } from "./dto/place-order.dto";
 import { OrderResponseDto } from "./dto/order-response.dto";
@@ -6,6 +6,11 @@ import { PlaceOrderCommand } from "../application/use-cases/place-order/place-or
 import { ListORderQUery } from "../application/query/liist-orders.query";
 import { Order } from "../domain/entities/order.entity";
 import { GetOrderQuery } from "../application/query/get-order.query";
+import { ConfirmedOrderCommand } from "../application/use-cases/confirm-order/confirm-order.command";
+import { ShipOrderDto } from "./dto/ship-order.dto";
+import { ShipOrderCommand } from "../application/use-cases/ship-order/ship-order.command";
+import { DeliverOrderCommand } from "../application/use-cases/deliver-order/deliver.command";
+import { CancelOrderCommand } from "../application/use-cases/cancel-order/cancel-order.command";
 
 @Controller('orders')
 export class OrderController
@@ -41,5 +46,28 @@ export class OrderController
     {
         const order = await this.queryBus.execute<GetOrderQuery, Order>(new GetOrderQuery(id));
         return OrderResponseDto.fromDomain(order);
+    }
+
+    @Patch(":id/confirm")
+    async confirm(@Param('id',new ParseUUIDPipe()) id: string) : Promise<void>
+    {
+        await this.commandBus.execute(new ConfirmedOrderCommand(id));
+    }
+
+    @Patch(':id/ship')
+    async ship(@Param('id', new ParseUUIDPipe()) id: string, @Body() dto: ShipOrderDto): Promise<void> {
+        await this.commandBus.execute(new ShipOrderCommand(id, dto.trackingNumber));
+    }
+
+    @Patch(':id/deliver')
+    async deliver(@Param('id', new ParseUUIDPipe()) id: string): Promise<void> {
+        await this.commandBus.execute(new DeliverOrderCommand(id));
+    }
+
+    @Patch(':id/cancel')
+    async cancel(@Param('id', new ParseUUIDPipe()) id: string,
+    @Body('reason') reason: string): Promise<void> 
+    {
+        await this.commandBus.execute(new CancelOrderCommand(id, reason));
     }
 }

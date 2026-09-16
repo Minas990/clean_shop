@@ -91,7 +91,7 @@ export class OrderStatus
     {
         return this.transationTo('shipped');
     }
-    delive():OrderStatus
+    deliver():OrderStatus
     {
         return this.transationTo('delivered');
     }
