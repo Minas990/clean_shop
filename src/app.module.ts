@@ -6,6 +6,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { ProductModule } from './product/product.module';
 import { CustomerModule } from './customers/customer.module';
 import { OrderMoudle } from './order/order.module';
+import { PaymentModule } from './payment/payment.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { OrderMoudle } from './order/order.module';
     DrizzleModule,
     ProductModule,
     CustomerModule,
-    OrderMoudle
+    OrderMoudle,
+    PaymentModule
   ],
 })
 export class AppModule {}

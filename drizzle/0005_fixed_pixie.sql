@@ -1,0 +1,1 @@
+ALTER TABLE "payments" RENAME COLUMN "paymentStatus" TO "status";
