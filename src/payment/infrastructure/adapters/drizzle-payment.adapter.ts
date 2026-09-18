@@ -37,13 +37,13 @@ export class DrizzlePaymentRpoistory implements PaymentRepositoryPort
         });
 
         if(!payment) return null;
-        return DrizzlePaymentRpoistory.toDomain(payment[0]);        
+        return DrizzlePaymentRpoistory.toDomain(payment);        
     }
 
     static toPersistence(payment: Payment) : typeof payments.$inferSelect
     {
         return {
-            amount: payment.amount.getAmount() ,
+            amount: payment.amount.toCents() ,
             createdAt: payment.createdAt,
             currency: payment.amount.getCurrency(),
             gatewayTransactionId: payment.gatewatTransactionId,
@@ -57,7 +57,7 @@ export class DrizzlePaymentRpoistory implements PaymentRepositoryPort
     static toDomain(payment: typeof payments.$inferSelect): Payment
     {
         return Payment.reconstitute({
-            amount:  Money.create(payment.amount,payment.currency),
+            amount:  Money.create(payment.amount / 100,payment.currency),
             createdAt: payment.createdAt,
             gatewatTransactionId: payment.gatewayTransactionId,
             id: new UniqueId(payment.id),

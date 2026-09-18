@@ -29,7 +29,7 @@ export class StripePaymentAdapter implements GatewayPort
                     }
                 }
             })),
-            success_url: urls.successUrl,
+            success_url: urls.successUrl || this.cs.getOrThrow('STRIPE_SUCCESS_URL'),
             cancel_url: urls.cancelUrl,
             metadata
         });  

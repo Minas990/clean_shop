@@ -41,7 +41,7 @@ export class DrizzleOrderRepo implements OrderRepositoryPort
             }});
 
             await Promise.all(itemsRow.map((item)=>{
-                tx.insert(orderItems).values(item).onConflictDoUpdate({
+                return tx.insert(orderItems).values(item).onConflictDoUpdate({
                     target: orderItems.id,
                     set: {
                         productName: item.productName,
@@ -105,7 +105,7 @@ export class DrizzleOrderRepo implements OrderRepositoryPort
     }
 
     async delete(id: OrderId): Promise<void> {
-        this.db.transaction( async (tx) => {
+        await this.db.transaction( async (tx) => {
             await tx.delete(orderItems).where(eq(orderItems.orderId, id.getValue()));
             await tx.delete(orders).where(eq(orders.id, id.getValue()));
         });

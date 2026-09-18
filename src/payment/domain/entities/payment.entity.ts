@@ -59,7 +59,19 @@ export class Payment extends AggregateRoot
         return new Payment(props);
     }
 
+    isSucceeded()
+    {
+        return this._status.isSucceeded();
+    }
     
+
+    startCheckOut()
+    {
+        if(this.isSucceeded())
+            throw new DomainException("Cannot start check out for a succeeded payment.");
+        this._status = PaymentStatus.Processing();
+        this._updatedAt = new Date();
+    }
 
     public get id(): PaymentId
     {

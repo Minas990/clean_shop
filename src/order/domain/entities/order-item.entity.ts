@@ -89,6 +89,13 @@ export class OrderItem extends Entity
             return lineTotal.subtract(this._discount);
         return lineTotal;
     }
+
+    getEffectiveUnitPrice() : Money 
+    {
+        const subtotal = this.getSubtotal();
+        return Money.fromCents(Math.round(subtotal.toCents() / this.quantity),subtotal.getCurrency());
+    }
+
     get productId(){return this._productId}
     get productName(){return this._productName}
     get unitPrice(){ return  this._unitPrice}

@@ -31,7 +31,8 @@ import { EventHadnlers } from "./application/events";
             provide:PRODUCT,
             useClass: ProductAdapter
         }
-    ]
+    ],
+    exports:[ORDER_REPOSITORY]
 })
 export class OrderMoudle
 {

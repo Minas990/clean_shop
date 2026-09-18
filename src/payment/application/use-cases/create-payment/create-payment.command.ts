@@ -1,0 +1,8 @@
+export class CreatePaymentCommand
+{
+    constructor(
+        public readonly orderId:string,
+        public readonly succesUrl?:string,
+        public readonly cancelUrl?:string
+    ) {}
+}

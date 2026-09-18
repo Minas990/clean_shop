@@ -41,6 +41,11 @@ export class PaymentStatus
         }
     }
 
+    isSucceeded():boolean
+    {
+        return this.value === PaymentStatusValue.SUCCEEDED;
+    }
+
     getValue(): PaymentStatusValue {
         return this.value;
     }

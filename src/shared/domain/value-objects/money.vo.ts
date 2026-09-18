@@ -19,6 +19,10 @@ export class Money
         return new Money(0,currency);
     }
 
+    static fromCents(cents: number, currency: string = 'USD'): Money {
+        return new Money(cents / 100, currency.toUpperCase());
+    }
+
     multiply(factor: number): Money
     {
         if(factor < 0 ) 
@@ -62,6 +66,7 @@ export class Money
     toCents() {
         return Math.round(this.amount * 100);
     }
+
 
     private assertSameCurrency(other:Money){
         if(other.getCurrency() !== this.getCurrency()) 
